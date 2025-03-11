@@ -1,8 +1,23 @@
 import axios from "axios"
-import { cookies } from "next/headers"
 
 const getOSVersion = () => {
   return typeof window !== "undefined" ? navigator.userAgent : "unknown"
+}
+
+// 클라이언트에서 쿠키를 가져오는 함수
+const getAuthToken = () => {
+  if (typeof document !== "undefined") {
+    const cookies = document.cookie.split("; ").reduce(
+      (acc, cookie) => {
+        const [name, value] = cookie.split("=")
+        acc[name] = value
+        return acc
+      },
+      {} as Record<string, string>,
+    )
+    return cookies["token"] // 저장된 토큰 가져오기
+  }
+  return null
 }
 
 export const axiosInstance = axios.create({
@@ -12,7 +27,7 @@ export const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    const token = (await cookies()).get("token") // 비동기 처리
+    const token = getAuthToken()
     // 비동기 처리
     config.headers.os = "web"
     config.headers["app-version"] = "1"

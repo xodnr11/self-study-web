@@ -1,4 +1,4 @@
-"use server"
+"use client"
 import { axiosInstance } from "@/api/axiosInstance"
 
 // 테스트!!
@@ -26,8 +26,8 @@ export const join = async (phone: string, authenticationCode: string) => {
       authenticationCode: authenticationCode,
     })
 
-    if (res.data.token) {
-      document.cookie = `token=${res.data.token}; path=/; max-age=86400` // 1일 유지
+    if (res.data.authToken) {
+      document.cookie = `token=${res.data.authToken}; path=/; max-age=86400` // 1일 유지
     }
 
     return res.data
