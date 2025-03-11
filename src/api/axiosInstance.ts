@@ -1,27 +1,31 @@
 import axios from "axios"
+import { cookies } from "next/headers"
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
+const getOSVersion = () => {
+  return typeof window !== "undefined" ? navigator.userAgent : "unknown"
+}
 
-export const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 50000,
-  headers: {
-    "Content-Type": "application/json",
-  },
+export const axiosInstance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  withCredentials: true, // 쿠키 포함
 })
 
-apiClient.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("access_token")
+axiosInstance.interceptors.request.use(
+  async (config) => {
+    const token = (await cookies()).get("token") // 비동기 처리
+    // 비동기 처리
+    config.headers.os = "web"
+    config.headers["app-version"] = "1"
+    config.headers["os-version"] = getOSVersion()
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`
+      config.headers["auth-token"] = `Bearer ${token}`
     }
     return config
   },
   (error) => Promise.reject(error),
 )
 
-apiClient.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     console.error("API Error:", error.response || error.message)
