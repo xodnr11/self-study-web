@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link"
-import styles from "@/app/page.module.css"
+import styles from "@/app/(pages)/(index)/page.module.css"
 import { useState } from "react"
 import { join, login } from "@/api/user/auth"
 export default function Home() {
