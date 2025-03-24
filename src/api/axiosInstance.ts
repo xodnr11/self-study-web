@@ -4,7 +4,6 @@ const getOSVersion = () => {
   return typeof window !== "undefined" ? navigator.userAgent : "unknown"
 }
 
-// 클라이언트에서 쿠키를 가져오는 함수
 const getAuthToken = () => {
   if (typeof document !== "undefined") {
     const cookies = document.cookie.split("; ").reduce(
@@ -15,7 +14,7 @@ const getAuthToken = () => {
       },
       {} as Record<string, string>,
     )
-    return cookies["token"] // 저장된 토큰 가져오기
+    return cookies["token"]
   }
   return null
 }
@@ -28,7 +27,6 @@ export const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   async (config) => {
     const token = getAuthToken()
-    // 비동기 처리
     config.headers.os = "web"
     config.headers["app-version"] = "1"
     config.headers["os-version"] = getOSVersion()
