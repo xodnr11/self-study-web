@@ -4,6 +4,7 @@ import styled from "styled-components"
 import { useMutation } from "@tanstack/react-query"
 import { postAuthenticate } from "@/api/member/postAuthenticate"
 import { postJoinAndLogin } from "@/api/member/postJoinAndLogin"
+import { showErrorMessage } from "@/utils/showErrorMessage"
 
 export default function Home() {
   const [state, setState] = useState({
@@ -20,12 +21,7 @@ export default function Home() {
         isSend: true,
       }))
     },
-    onError: (error: any) => {
-      const defaultMessage = "잠시 후 다시 시도해주세요."
-      const dataMessage = error?.response?.data?.data?.[0]?.message
-      const fieldErrorMessage = error?.response?.data?.fieldErrors?.[0]?.message
-      alert(dataMessage || fieldErrorMessage || defaultMessage)
-    },
+    onError: showErrorMessage,
   })
 
   const { mutate: loginMutate } = useMutation({
@@ -39,12 +35,7 @@ export default function Home() {
         document.cookie = `token=${res.authToken}; path=/; max-age=86400`
       }
     },
-    onError: (error: any) => {
-      const defaultMessage = "잠시 후 다시 시도해주세요."
-      const dataMessage = error?.response?.data?.data?.[0]?.message
-      const fieldErrorMessage = error?.response?.data?.fieldErrors?.[0]?.message
-      alert(dataMessage || fieldErrorMessage || defaultMessage)
-    },
+    onError: showErrorMessage,
   })
 
   return (
