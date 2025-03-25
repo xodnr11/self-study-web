@@ -1,12 +1,12 @@
 import { axiosInstance } from "@/api/axiosInstance"
 
 export interface PostJoinAndLoginRequestType {
-  phone: number
-  authenticationCode: number
+  phone: string
+  authenticationCode: string
 }
 
 export const postJoinAndLogin = async (params: PostJoinAndLoginRequestType) => {
-  await axiosInstance.post("/sels/api/u/member", {
-    params: params,
-  })
+  const { data } = await axiosInstance.post("/sels/api/u/member", params)
+
+  return data
 }
