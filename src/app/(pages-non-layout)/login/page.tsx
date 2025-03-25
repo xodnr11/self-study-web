@@ -14,27 +14,36 @@ export default function Home() {
 
   const { mutate: authenticationMutate } = useMutation({
     mutationFn: () => postAuthenticate(state.phone),
-    onSuccess: () => {},
+    onSuccess: () => {
+      setState((prev) => ({
+        ...prev,
+        isSend: true,
+      }))
+    },
     onError: (error: any) => {
-      alert(
-        error?.response?.data?.data?.[0]?.message ??
-          "잠시 후 다시 시도해주세요.",
-      )
+      const defaultMessage = "잠시 후 다시 시도해주세요."
+      const dataMessage = error?.response?.data?.data?.[0]?.message
+      const fieldErrorMessage = error?.response?.data?.fieldErrors?.[0]?.message
+      alert(dataMessage || fieldErrorMessage || defaultMessage)
     },
   })
 
   const { mutate: loginMutate } = useMutation({
     mutationFn: () =>
       postJoinAndLogin({
-        phone: parseInt(state.phone),
-        authenticationCode: parseInt(state.authenticationCode),
+        phone: state.phone,
+        authenticationCode: state.authenticationCode,
       }),
-    onSuccess: () => {},
+    onSuccess: (res) => {
+      if (res.authToken) {
+        document.cookie = `token=${res.authToken}; path=/; max-age=86400`
+      }
+    },
     onError: (error: any) => {
-      alert(
-        error?.response?.data?.data?.[0]?.message ??
-          "잠시 후 다시 시도해주세요.",
-      )
+      const defaultMessage = "잠시 후 다시 시도해주세요."
+      const dataMessage = error?.response?.data?.data?.[0]?.message
+      const fieldErrorMessage = error?.response?.data?.fieldErrors?.[0]?.message
+      alert(dataMessage || fieldErrorMessage || defaultMessage)
     },
   })
 
