@@ -1,4 +1,6 @@
 "use client"
+import Link from "next/link"
+import styles from "@/app/(pages)/page.module.css"
 import { useState } from "react"
 import styled from "styled-components"
 import { useMutation } from "@tanstack/react-query"
