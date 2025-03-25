@@ -21,7 +21,6 @@ export default function Home() {
         isSend: true,
       }))
     },
-    onError: showErrorMessage,
   })
 
   const { mutate: loginMutate } = useMutation({
@@ -35,7 +34,6 @@ export default function Home() {
         document.cookie = `token=${res.authToken}; path=/; max-age=86400`
       }
     },
-    onError: showErrorMessage,
   })
 
   return (
