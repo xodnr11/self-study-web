@@ -1,6 +1,4 @@
 "use client"
-import Link from "next/link"
-import styles from "@/app/(pages)/page.module.css"
 import { useState } from "react"
 import styled from "styled-components"
 import { useMutation } from "@tanstack/react-query"
@@ -53,7 +51,7 @@ export default function Home() {
             authenticationCode: e.target.value,
           }))
         }
-        placeholder="안증번호를 입력해주세요."
+        placeholder="인증번호를 입력해주세요."
       />
       {state.isSend ? (
         <Button onClick={() => authenticationMutate()}>회원가입</Button>
