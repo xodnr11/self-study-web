@@ -11,11 +11,15 @@ export default function Home() {
     authenticationCode: "",
     isSend: false,
   })
+
   const { mutate: authenticationMutate } = useMutation({
     mutationFn: () => postAuthenticate(state.phone),
     onSuccess: () => {},
-    onError: (error) => {
-      alert(`잠시 후 다시 시도해주세요.`)
+    onError: (error: any) => {
+      alert(
+        error?.response?.data?.data?.[0]?.message ??
+          "잠시 후 다시 시도해주세요.",
+      )
     },
   })
 
@@ -26,8 +30,11 @@ export default function Home() {
         authenticationCode: parseInt(state.authenticationCode),
       }),
     onSuccess: () => {},
-    onError: (error) => {
-      alert(`잠시 후 다시 시도해주세요.`)
+    onError: (error: any) => {
+      alert(
+        error?.response?.data?.data?.[0]?.message ??
+          "잠시 후 다시 시도해주세요.",
+      )
     },
   })
 
@@ -54,7 +61,7 @@ export default function Home() {
         placeholder="인증번호를 입력해주세요."
       />
       {state.isSend ? (
-        <Button onClick={() => authenticationMutate()}>회원가입</Button>
+        <Button onClick={() => loginMutate()}>회원가입</Button>
       ) : (
         <Button onClick={() => authenticationMutate()}>인증번호 전송</Button>
       )}
@@ -76,7 +83,6 @@ const PhoneInput = styled.input`
   padding: 15px;
   font-size: 16px;
   border: 1px solid #ccc;
-  font-family: Inter;
   border-radius: 5px;
   width: 100%;
   outline: none;
@@ -111,7 +117,6 @@ const Button = styled.button`
   padding: 20px 121px;
   font-size: 16px;
   color: white;
-  font-family: Inter;
   font-weight: 700;
   background-color: #5569e6;
   border: none;
